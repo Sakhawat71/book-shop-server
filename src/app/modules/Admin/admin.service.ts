@@ -1,4 +1,3 @@
-import { BlogModel } from "../Blog/blog.model";
 import { UserModel } from "../User/user.model";
 
 // block user 
@@ -11,11 +10,11 @@ const blockUserByAdmin = async (id: string) => {
 
 
 //delete blog
-const deleteBlogByAdmin = async (id: string) => {
-    return await BlogModel.findByIdAndDelete(id);
-};
+// const deleteBlogByAdmin = async (id: string) => {
+//     return await BlogModel.findByIdAndDelete(id);
+// };
 
 export const adminServices = {
     blockUserByAdmin,
-    deleteBlogByAdmin,
+    // deleteBlogByAdmin,
 }

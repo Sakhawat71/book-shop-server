@@ -54,7 +54,7 @@ const loginUser = async (payLoad: ILoginUser) => {
         JwtPayload,
         config.accessTokenSecret as string,
         {
-            expiresIn: config.accessTokenExpiry as string,
+            expiresIn: config.accessTokenExpiry as string | number,
         }
     );
 

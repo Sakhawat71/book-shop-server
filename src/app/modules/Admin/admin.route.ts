@@ -8,9 +8,9 @@ router.patch(
     adminContrller.blockUser
 );
 
-router.delete(
-    '/blogs/:id',
-    adminContrller.deleteBlog
-)
+// router.delete(
+//     '/blogs/:id',
+//     adminContrller.deleteBlog
+// )
 
 export const adminRoute = router;
