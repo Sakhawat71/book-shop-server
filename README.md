@@ -20,7 +20,7 @@ Book Shop API is a backend application built with TypeScript, Express.js, and Mo
 
 ### Step 1: Clone the Repository
 ```bash
-git clone https://github.com/Sakhawat71/book-shop-backend.git
+git clone https://github.com/Sakhawat71/book-shop-server.git
 cd book-shop-api
 ```
 
@@ -34,7 +34,7 @@ npm install
 npm run start
 ```
 
-#### live link : [live link](https://book-shop-sabbir.vercel.app/)
+#### live link : [live link](https://book-shop-server-71.vercel.app/)
 
 ## API Endpoints
 
@@ -49,3 +49,6 @@ npm run start
 - **Create Order**: `POST /api/orders`
 - **Get Total Revenue**: `GET /api/orders/revenue`
 
+### 3. Auth
+- **Log in**: `POST /api/auth/login`
+- **Register**: `POST /api/auth/register`
