@@ -18,7 +18,7 @@ const createNewBook = async (req: Request, res: Response, next: NextFunction): P
         })
 
     } catch (error) {
-        if (error.name === 'ZodError') {
+        if (error instanceof Error && error.name === 'ZodError') {
             next(error)
         }
         else {
