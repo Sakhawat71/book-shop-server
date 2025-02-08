@@ -9,13 +9,11 @@ const app: Application = express();
 const corsOptions = {
     origin: "http://localhost:5173",
     credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization"],
-    methods: ["GET", "POST", "PUT", "DELETE"]
 };
 
 app.use(express.json());
 app.use(cors(corsOptions));
-app.use(cors());
+// app.use(cors()); this sutpid line of code was causing the issue of cors
 app.use(cookieParser())
 app.use('/api', route);
 
