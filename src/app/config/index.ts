@@ -9,6 +9,6 @@ export default {
     NODE_ENV: process.env.NODE_ENV,
     saltRound: process.env.SALT_ROUND,
     accessTokenSecret: process.env.ACCESS_TOKEN_SECRET,
-    accessTokenExpiry: process.env.ACCESS_TOKEN_EXPIRY,
+    accessTokenExpiry: process.env.ACCESS_TOKEN_EXPIRY || '30d',
     // host: process.env.HOST,
 }

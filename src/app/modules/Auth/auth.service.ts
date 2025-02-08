@@ -5,7 +5,7 @@ import { UserModel } from "../User/user.model";
 import { ILoginUser } from "./auth.interface";
 import bcrypt from 'bcrypt';    
 import config from "../../config";
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 
 
 // register
@@ -53,10 +53,10 @@ const loginUser = async (payLoad: ILoginUser) => {
     const accessToken = jwt.sign(
         JwtPayload,
         config.accessTokenSecret as string,
-        {
-            expiresIn: config.accessTokenExpiry as string | number,
+        <SignOptions>{
+            expiresIn: config.accessTokenExpiry,
         }
-    );
+    );    
 
     return {
         token: accessToken

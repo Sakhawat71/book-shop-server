@@ -7,16 +7,17 @@ const app: Application = express();
 
 
 const corsOptions = {
-    origin: 'http://localhost:5173',
+    origin: "http://localhost:5173",
     credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: ["GET", "POST", "PUT", "DELETE"]
 };
 
 app.use(express.json());
+app.use(cors(corsOptions));
 app.use(cors());
 app.use(cookieParser())
-app.use(cors(corsOptions));
-
-app.use('/api',route);
+app.use('/api', route);
 
 
 app.get('/', (req: Request, res: Response) => {
@@ -25,6 +26,7 @@ app.get('/', (req: Request, res: Response) => {
         message: "book-shop server is running..... .... ... .. ."
     })
 });
+
 
 app.use(globalErrorHandler)
 
