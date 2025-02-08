@@ -3,29 +3,39 @@ import AppError from "../../errors/appError";
 import { IUser } from "../User/user.interface";
 import { UserModel } from "../User/user.model";
 import { ILoginUser } from "./auth.interface";
-import bcrypt from 'bcrypt';    
+import bcrypt from 'bcrypt';
 import config from "../../config";
 import jwt, { SignOptions } from 'jsonwebtoken';
 
 
 // register
 const registerUser = async (payLoad: IUser) => {
+
+    const { email } = payLoad;
+    const existingUser = await UserModel.findOne({ email });
+    console.log(existingUser);
+    if (existingUser) {
+        throw new AppError(
+            StatusCodes.CONFLICT,
+            "User already exists with this email"
+        );
+    };
+
     return await UserModel.create(payLoad);
 };
 
 // login
 const loginUser = async (payLoad: ILoginUser) => {
 
-    const {email, password} = payLoad;
-
-    const user = await UserModel.findOne({email});
+    const { email, password } = payLoad;
+    const user = await UserModel.findOne({ email });
     if (!user) {
         throw new AppError(
             StatusCodes.NOT_FOUND,
             "Invalid credentials"
         );
     };
-    
+
     // Check -> if user is Blocked
     if (user.isBlocked) {
         throw new AppError(
@@ -56,7 +66,7 @@ const loginUser = async (payLoad: ILoginUser) => {
         <SignOptions>{
             expiresIn: config.accessTokenExpiry,
         }
-    );    
+    );
 
     return {
         token: accessToken

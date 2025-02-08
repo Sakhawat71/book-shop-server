@@ -1,16 +1,35 @@
 import mongoose from "mongoose";
 import app from "./app";
 import config from "./app/config";
+import { Server } from "http";
+
+let server : Server;
 
 async function main() {
     try {
         await mongoose.connect(config.db_url as string);
-        app.listen(config.port, () => {
-            console.log(`Example app listening on port ${config.port}`)
+        server = app.listen(config.port, () => {
+            console.log(`Bookshop app listening on port ${config.port}`)
         });
     } catch (error) {
         console.error("Error occurred during startup:", error);
         process.exit(1);
     }
 }
-main()
+main();
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('😒 Unhandled Rejection:', reason, promise);
+    // console.log(' Unhandled Rejection:');
+    if (server) {
+        server.close(() => {
+            process.exit(1);
+        })
+    }
+    process.exit(1);
+});
+
+process.on('uncaughtException', () => {
+    console.log('😢 uncaught Exception');
+    process.exit(1);
+});
