@@ -12,8 +12,9 @@ import jwt, { SignOptions } from 'jsonwebtoken';
 const registerUser = async (payLoad: IUser) => {
 
     const { email } = payLoad;
+
     const existingUser = await UserModel.findOne({ email });
-    console.log(existingUser);
+    // console.log(existingUser);
     if (existingUser) {
         throw new AppError(
             StatusCodes.CONFLICT,
@@ -21,8 +22,27 @@ const registerUser = async (payLoad: IUser) => {
         );
     };
 
-    return await UserModel.create(payLoad);
+    const newUser = await UserModel.create(payLoad);
+
+    // Generate JWT token for the new user
+    const JwtPayload = {
+        userEmail: newUser.email,
+        role: newUser.role,
+        id: newUser._id,
+    };
+
+    const accessToken = jwt.sign(
+        JwtPayload,
+        config.accessTokenSecret as string,
+        <SignOptions>{ expiresIn: config.accessTokenExpiry }
+    );
+
+    return {
+        token: accessToken,
+        newUser
+    };
 };
+
 
 // login
 const loginUser = async (payLoad: ILoginUser) => {
@@ -32,7 +52,7 @@ const loginUser = async (payLoad: ILoginUser) => {
     if (!user) {
         throw new AppError(
             StatusCodes.NOT_FOUND,
-            "Invalid credentials"
+            "User not found"
         );
     };
 
@@ -49,7 +69,7 @@ const loginUser = async (payLoad: ILoginUser) => {
     if (!isPasswordMatch) {
         throw new AppError(
             StatusCodes.UNAUTHORIZED,
-            "Invalid credentials"
+            "Password is incorrect"
         );
     };
 
