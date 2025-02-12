@@ -7,7 +7,10 @@ import { orderService } from './order.service';
 // create order
 const createOrder = async (req: Request, res: Response, next: NextFunction) => {
     try {
+        // const {user,...orderData} = req.body;
         const orderData = req.body;
+        // const client_ip = req.ip;
+        // console.log(user,orderData,client_ip);
         const validOrderData = orderValidationSchema.parse(orderData);
 
         // Check in database : is book available or not
@@ -39,6 +42,12 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
         await foundBook.save();
 
         // create the order
+        // const newOrder = await orderService.createAnOrder(
+        //     user,
+        //     validOrderData as any,
+        //     client_ip!
+        // );
+
         const newOrder = await orderService.createAnOrder(validOrderData as any);
         res.status(201).json({
             message: "Order created successfully",
