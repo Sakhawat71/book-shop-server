@@ -5,6 +5,40 @@ import { orderService } from './order.service';
 import { IUserAddress } from './order.interface';
 
 
+// Get all orders
+const getOrders = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const orders = await orderService.getAllOrders();
+        res.status(200).json({
+            message: "Orders retrieved successfully",
+            success: true,
+            data: orders,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Get single order by ID
+const getSingleOrder = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
+        const order = await orderService.getSingleOrder(id);
+        res.status(200).json({
+            message: "Order retrieved successfully",
+            success: true,
+            data: order,
+        });
+    } catch (error) {
+        res.status(404).json({
+            message: "Order not found",
+            success: false,
+        });
+        next(error)
+    }
+};
+
+
 // create order
 const createOrder = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -89,6 +123,8 @@ const getRevenue = async (req: Request, res: Response, next: NextFunction) => {
 
 
 export const orderContrller = {
+    getOrders,
+    getSingleOrder,
     createOrder,
     getRevenue,
 }

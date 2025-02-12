@@ -1,5 +1,35 @@
 import { IOrder } from "./order.interface";
 import { OrderModel } from "./order.model";
+import { orderUtils } from "./order.utils";
+
+
+// Get all orders
+const getAllOrders = async () => {
+    try {
+        const orders = await OrderModel.find().sort({ createdAt: -1 }); // Sorting by latest order first
+        return orders;
+    } catch (error) {
+        console.error("Error in getAllOrders:", error);
+        throw error;
+    }
+};
+
+// Get single order by ID
+const getSingleOrder = async (orderId: string) => {
+    try {
+        const order = await OrderModel.findById(orderId);
+        if (!order) {
+            throw new Error("Order not found");
+        }
+        return order;
+    } catch (error) {
+        console.error("Error in getSingleOrder:", error);
+        throw error;
+    }
+};
+
+
+
 
 // Create an order
 const createAnOrder = async (
@@ -7,8 +37,8 @@ const createAnOrder = async (
     orderData: IOrder,
     client_ip: string
 ) => {
-    const order = await OrderModel.create(orderData);
-    
+
+    let order = await OrderModel.create(orderData);
 
     // payment integration
     const shurjopayPayload = {
@@ -24,12 +54,24 @@ const createAnOrder = async (
     };
 
     // console.log('services',shurjopayPayload);
-    return {shurjopayPayload,order};
+    // return {shurjopayPayload,order};
 
-    // const payment = await orderUtils.makePaymentAsync(shurjopayPayload);
+    const payment = await orderUtils.makePaymentAsync(shurjopayPayload);
 
+    if (payment?.transactionStatus) {
+        order = await OrderModel.findByIdAndUpdate(
+            order._id,
+            {
+                transaction: {
+                    id: payment.sp_order_id,
+                    transactionStatus: payment.transactionStatus,
+                },
+            },
+            { new: true } // return the updated document
+        );
+    }
     // if (payment?.transactionStatus) {
-    //     order = await order.updateOne({
+    //     order = await OrderModel.updateOne({
     //         transaction: {
     //             id: payment.sp_order_id,
     //             transactionStatus: payment.transactionStatus,
@@ -37,7 +79,8 @@ const createAnOrder = async (
     //     });
     // }
 
-    // return payment.checkout_url;
+    return { payment,order };
+    // return payment?.checkout_url;
 };
 
 // Calculate Revenue from Orders
@@ -75,6 +118,8 @@ const calculateRevenueFromOrders = async () => {
 
 
 export const orderService = {
+    getAllOrders,
+    getSingleOrder,
     createAnOrder,
     calculateRevenueFromOrders,
 }
