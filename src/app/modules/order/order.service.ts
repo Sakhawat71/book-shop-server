@@ -3,28 +3,28 @@ import { OrderModel } from "./order.model";
 
 // Create an order
 const createAnOrder = async (
-    // user: any,
+    user: any,
     orderData: IOrder,
-    // client_ip: string
+    client_ip: string
 ) => {
     const order = await OrderModel.create(orderData);
     
 
     // payment integration
-    // const shurjopayPayload = {
-    //     amount: orderData.totalPrice,
-    //     order_id: order[0]._id,
-    //     currency: "BDT",
-    //     customer_name: user.name,
-    //     customer_address: user.address,
-    //     customer_email: orderData.email,
-    //     customer_phone: user.phone,
-    //     customer_city: user.city,
-    //     client_ip,
-    // };
+    const shurjopayPayload = {
+        amount: orderData.totalPrice,
+        order_id: order._id,
+        currency: "BDT",
+        customer_name: user.name,
+        customer_address: user.address,
+        customer_email: orderData.email,
+        customer_phone: user.phone,
+        customer_city: user.city,
+        client_ip,
+    };
 
     // console.log('services',shurjopayPayload);
-    return order;
+    return {shurjopayPayload,order};
 
     // const payment = await orderUtils.makePaymentAsync(shurjopayPayload);
 
