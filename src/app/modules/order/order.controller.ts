@@ -3,6 +3,9 @@ import { NextFunction, Request, Response } from "express";
 import { orderValidationSchema } from "./order.zod-validation";
 import { orderService } from './order.service';
 import { IUserAddress } from './order.interface';
+import catchAsync from '../../utils/catchAsync';
+import sendResponse from '../../utils/sendResponce';
+import { StatusCodes } from 'http-status-codes';
 
 
 // Get all orders
@@ -42,7 +45,7 @@ const getSingleOrder = async (req: Request, res: Response, next: NextFunction) =
 // create order
 const createOrder = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const {user,...orderData} = req.body;
+        const { user, ...orderData } = req.body;
         const client_ip = req.ip;
         const validOrderData = orderValidationSchema.parse(orderData);
 
@@ -100,7 +103,21 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
             });
         }
     }
-}
+};
+
+
+const verifyPayment = catchAsync(async (req, res) => {
+    const order = await orderService.verifyPayment(req.query.order_id as string);
+
+    sendResponse(res, {
+        statusCode: StatusCodes.CREATED,
+        success: true,
+        message: "Order verified successfully",
+        data: order,
+    });
+});
+
+
 
 // Calculate Revenue from Orders
 const getRevenue = async (req: Request, res: Response, next: NextFunction) => {
@@ -126,5 +143,6 @@ export const orderContrller = {
     getOrders,
     getSingleOrder,
     createOrder,
+    verifyPayment,
     getRevenue,
 }
