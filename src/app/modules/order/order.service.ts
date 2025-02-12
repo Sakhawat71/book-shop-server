@@ -2,10 +2,36 @@ import { IOrder } from "./order.interface";
 import { OrderModel } from "./order.model";
 
 // Create an order
-const createAnOrder = async (orderData: IOrder) => {
-    const result = await OrderModel.create(orderData);
-    return result;
-}
+const createAnOrder = async (user: any, orderData: IOrder, client_ip: string) => {
+    const order = await OrderModel.create(user, orderData);
+    // return order;
+
+    // payment integration
+    const shurjopayPayload = {
+        amount: orderData.totalPrice,
+        order_id: order[0]._id,
+        currency: "BDT",
+        customer_name: user.name,
+        customer_address: user.address,
+        customer_email: orderData.email,
+        customer_phone: user.phone,
+        customer_city: user.city,
+        client_ip,
+    };
+
+    // const payment = await orderUtils.makePaymentAsync(shurjopayPayload);
+
+    // if (payment?.transactionStatus) {
+    //     order = await order.updateOne({
+    //         transaction: {
+    //             id: payment.sp_order_id,
+    //             transactionStatus: payment.transactionStatus,
+    //         },
+    //     });
+    // }
+
+    // return payment.checkout_url;
+};
 
 // Calculate Revenue from Orders
 const calculateRevenueFromOrders = async () => {
@@ -19,16 +45,16 @@ const calculateRevenueFromOrders = async () => {
             },
             // stap 2 : sum all revenue values
             {
-                $group : {
-                    _id : null,
-                    totalRevenue : {$sum : "$revenue"}
+                $group: {
+                    _id: null,
+                    totalRevenue: { $sum: "$revenue" }
                 }
             },
             // stap 3 : total revenue as the result
-            { 
-                $project : {
-                    _id : 0,
-                    totalRevenue : 1
+            {
+                $project: {
+                    _id: 0,
+                    totalRevenue: 1
                 }
             }
         ]);
