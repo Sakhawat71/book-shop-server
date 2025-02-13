@@ -59,7 +59,7 @@ const createAnOrder = async (
     const payment = await orderUtils.makePaymentAsync(shurjopayPayload);
 
     if (payment?.transactionStatus) {
-        order = await OrderModel.findByIdAndUpdate(
+        const updatedOrder = await OrderModel.findByIdAndUpdate(
             order._id,
             {
                 transaction: {
@@ -69,6 +69,12 @@ const createAnOrder = async (
             },
             { new: true } // return the updated document
         );
+
+        if (!updatedOrder) {
+            throw new Error("Failed to update order transaction");
+        }
+
+        order = updatedOrder;
     }
     // if (payment?.transactionStatus) {
     //     order = await OrderModel.updateOne({
