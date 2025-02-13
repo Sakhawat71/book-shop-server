@@ -8,8 +8,13 @@ const getAllUsersFromDB = async () => {
 };
 
 // get by id
-const getSingleUserFromDB = async (id: string) => {
+const getUserByIdFromDB = async (id: string) => {
     return await UserModel.findById(id);
+};
+
+// by email
+const getUserByEmailFromDB = async (email: string) => {
+    return await UserModel.findOne({email});
 };
 
 // update
@@ -24,7 +29,8 @@ const deleteUserFromDB = async (id: string) => {
 
 export const userServices = {
     getAllUsersFromDB,
-    getSingleUserFromDB,
+    getUserByIdFromDB,
+    getUserByEmailFromDB,
     updateUserInDB,
     deleteUserFromDB
 };
