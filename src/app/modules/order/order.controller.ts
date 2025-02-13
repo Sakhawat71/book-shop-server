@@ -25,8 +25,8 @@ const getOrders = async (req: Request, res: Response, next: NextFunction) => {
 // Get single order by ID
 const getSingleOrder = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { id } = req.params;
-        const order = await orderService.getSingleOrder(id);
+        const { email } = req.params;
+        const order = await orderService.getSingleOrder(email);
         res.status(200).json({
             message: "Order retrieved successfully",
             success: true,

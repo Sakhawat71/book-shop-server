@@ -15,9 +15,9 @@ const getAllOrders = async () => {
 };
 
 // Get single order by ID
-const getSingleOrder = async (orderId: string) => {
+const getSingleOrder = async (email: string) => {
     try {
-        const order = await OrderModel.findById(orderId);
+        const order = await OrderModel.find({email});
         if (!order) {
             throw new Error("Order not found");
         }
