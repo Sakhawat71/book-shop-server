@@ -29,8 +29,6 @@ const getSingleOrder = async (email: string) => {
 };
 
 
-
-
 // Create an order
 const createAnOrder = async (
     user: any,

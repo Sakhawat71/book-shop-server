@@ -15,7 +15,7 @@ const bookSchema = new Schema<IBook>({
     },
     image: {
         type: String,
-        required: [true, 'image is required.'],
+        // : [true, 'image is required.'],
     },
     price: {
         type: Number,

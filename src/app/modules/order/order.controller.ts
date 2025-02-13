@@ -48,6 +48,8 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
         const { user, ...orderData } = req.body;
         const client_ip = req.ip;
         const validOrderData = orderValidationSchema.parse(orderData);
+        // console.log(validOrderData);
+
 
         // Check in database : is book available or not
         const foundBook = await BookModel.findById(validOrderData.product);
