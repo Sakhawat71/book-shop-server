@@ -13,6 +13,10 @@ const bookSchema = new Schema<IBook>({
         required: [true, 'Author is required.'],
         trim: true,
     },
+    image: {
+        type: String,
+        required: [true, 'image is required.'],
+    },
     price: {
         type: Number,
         required: [true, 'Price is required.'],

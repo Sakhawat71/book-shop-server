@@ -6,7 +6,8 @@ export interface IBook {
     description: string;
     quantity: number;
     inStock: boolean;
-    // isDeleted?: boolean;
+    image?: string;
+    isDeleted?: boolean;
     createdAt?: string;
     updatedAt?: string; 
 }
