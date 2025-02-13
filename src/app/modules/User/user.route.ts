@@ -9,7 +9,7 @@ route.get(
 );
 
 route.get(
-    '/:email',
+    '/email/:email',
     userController.getUserByEmail
 )
 
